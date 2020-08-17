@@ -1,0 +1,17 @@
+更新後
+python -m venv env
+env\Scripts\activate
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+
+
+Git
+git init
+git add -A .
+git commit -m "4 commit"
+git remote remove heroku
+git remote add heroku https://github.com/kojima-tsubasa/bmi-test7.git
+git push heroku master

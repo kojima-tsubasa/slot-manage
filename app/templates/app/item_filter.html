@@ -1,0 +1,146 @@
+{% extends "./_base.html" %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="container">
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">検索条件</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="filter" method="get">
+                        <div class="modal-body">
+                            {{ filter.form|crispy }}
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a class="btn btn-outline-dark" data-dismiss="modal">戻る</a>
+                        <button type="submit" class="btn btn-outline-dark" form="filter">検索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="float-left m-1">
+                    <a class="btn btn-outline-dark" href="{% url 'select' '202006' %}">202006</a>
+                    <a class="btn btn-outline-dark" href="{% url 'select' '202007' %}">202007</a>
+                    <a class="btn btn-outline-dark" href="{% url 'select' '202008' %}">202008</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-secondary filtered" style="visibility:hidden" href="/?page=1">検索を解除</a>
+                <div class="float-right mt-1">
+                    <a class="btn btn-outline-dark" href="{% url 'create' %}">新規</a>
+                    <a class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" href="#">検索</a>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-10 mx-auto">
+                {% include "./_pagination.html" %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="float-left m-1">
+                    {% ifequal request.path|slice:"1:7" "select" %}
+                        <p>{{ request.path|slice:"8:14" }}収支</p>
+                    {% else %}
+                        <p>{{ yearmonth }}収支</p>
+                    {% endifequal %}
+                </div>
+            </div>
+        </div>
+
+        <table class="table" id="table_1">
+            <thead>
+                <tr>
+                    <th>機種名</th>
+                    <th>収支</th>
+                    <th>作成時間</th>
+                </tr>
+            </thead>
+
+            {% for item in item_list %}
+                {% ifequal request.path|slice:"1:7" "select" %}
+                    {% ifequal item.sample_3 request.path|slice:"8:14" %}
+                        <tbody>
+                            <tr>
+                                <td><p>{{ item.sample_1|default_if_none:"未入力" }}</p></td>
+                                <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
+                                <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
+                                <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk %}">削除</a></td>
+                            </tr>
+                        </tbody>
+                    {% endifequal %}
+                {% else %}
+                    {% ifequal item.sample_3 yearmonth %}
+                        <tbody>
+                            <tr>
+                                <td><p>{{ item.sample_1|default_if_none:"未入力" }}</p></td>
+                                <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
+                                <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
+                                <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk %}">削除</a></td>
+                            </tr>
+                        </tbody>
+                    {% endifequal %}
+                {% endifequal %}
+            {% empty %}
+                <li class="list-group-item">
+                    対象のデータがありません
+                </li>
+            {% endfor %}
+        </table>
+<input type="button" value="合計" onclick="calc_total();"/>
+
+<body onload = "calc_total();"></body>
+
+
+    <script language="javascript" type="text/javascript">
+function calc_total(){
+  var tblTbody = document.getElementById('table_1');
+  var goukei = 0;
+    for (var i=1, rowLen=tblTbody.rows.length; i<rowLen; i++) {
+        //i行目のj列目のセルを取得
+        var cells = tblTbody.rows[i].cells[1];
+        goukei += parseInt(cells.innerText);
+        //取得した値をテキストエリアへ表示
+    }
+        document.getElementById("goukei").innerText = goukei;
+}
+    </script>
+
+
+                            <div class="row">
+                                <div class="col-7 col-sm-9">
+                                    <div id="goukei"></div>
+                                </div>
+                            </div>
+
+
+        <div class="row mt-3">
+            <div class="col-10 mx-auto">
+                {% include "./_pagination.html" %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right mt-1 mb-3">
+                    <a class="btn btn-outline-dark" href="{% url 'create' %}">新規</a>
+                    <a class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" href="#">検索</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
