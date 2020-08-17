@@ -30,6 +30,7 @@ class Item(models.Model):
     # サンプル項目3 整数
     sample_3 = models.CharField(
     #sample_3 = models.IntegerField(
+        #default='202008',
         verbose_name='年月',
         max_length=8,
         blank=True,

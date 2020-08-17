@@ -27,9 +27,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="float-left m-1">
-                    <a class="btn btn-outline-dark" href="{% url 'select' '202006' %}">202006</a>
-                    <a class="btn btn-outline-dark" href="{% url 'select' '202007' %}">202007</a>
-                    <a class="btn btn-outline-dark" href="{% url 'select' '202008' %}">202008</a>
+                <!--
+                    {% for item in item_list %}
+                        <a class="btn btn-outline-dark" href="{% url 'select' item.sample_3 %}">{{ item.sample_3 }}</a>
+                    {% endfor %}
+                -->
+                <a class="btn btn-outline-dark" href="{% url 'select' '202006' %}">202006</a>
+                <a class="btn btn-outline-dark" href="{% url 'select' '202007' %}">202007</a>
+                <a class="btn btn-outline-dark" href="{% url 'select' '202008' %}">202008</a>
                 </div>
             </div>
         </div>
@@ -39,7 +44,11 @@
             <div class="col-12">
                 <a class="btn btn-secondary filtered" style="visibility:hidden" href="/?page=1">検索を解除</a>
                 <div class="float-right mt-1">
-                    <a class="btn btn-outline-dark" href="{% url 'create' %}">新規</a>
+                    {% ifequal request.path|slice:"1:7" "select" %}
+                        <a class="btn btn-outline-dark" href="{% url 'create' request.path|slice:"8:14" %}">新規</a>
+                    {% else %}
+                        <a class="btn btn-outline-dark" href="{% url 'create' yearmonth %}">新規</a>
+                    {% endifequal %}
                     <a class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" href="#">検索</a>
                 </div>
             </div>
@@ -79,7 +88,11 @@
                                 <td><p>{{ item.sample_1|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
-                                <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk %}">削除</a></td>
+                                {% ifequal request.path|slice:"1:7" "select" %}
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk request.path|slice:"8:14" %}">削除</a></td>
+                                {% else %}
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk yearmonth %}">削除</a></td>
+                                {% endifequal %}
                             </tr>
                         </tbody>
                     {% endifequal %}
@@ -90,7 +103,11 @@
                                 <td><p>{{ item.sample_1|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
-                                <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk %}">削除</a></td>
+                                {% ifequal request.path|slice:"1:7" "select" %}
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk request.path|slice:"8:14" %}">削除</a></td>
+                                {% else %}
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk yearmonth %}">削除</a></td>
+                                {% endifequal %}
                             </tr>
                         </tbody>
                     {% endifequal %}
@@ -136,7 +153,11 @@ function calc_total(){
         <div class="row">
             <div class="col-12">
                 <div class="float-right mt-1 mb-3">
-                    <a class="btn btn-outline-dark" href="{% url 'create' %}">新規</a>
+                    {% ifequal request.path|slice:"1:7" "select" %}
+                        <a class="btn btn-outline-dark" href="{% url 'create' request.path|slice:"8:14" %}">新規</a>
+                    {% else %}
+                        <a class="btn btn-outline-dark" href="{% url 'create' yearmonth %}">新規</a>
+                    {% endifequal %}
                     <a class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal" href="#">検索</a>
                 </div>
             </div>

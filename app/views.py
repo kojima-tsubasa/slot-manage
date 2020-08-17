@@ -90,7 +90,12 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
     """
     model = Item
     form_class = ItemForm
-    success_url = reverse_lazy('index')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        yearmonth = self.request.path[8:14]
+        initial["sample_3"] = yearmonth
+        return initial
 
     def form_valid(self, form):
         """
@@ -103,7 +108,10 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item.updated_at = timezone.now()
         item.save()
 
-        return HttpResponseRedirect(self.success_url)
+        yearmonth = self.request.path[8:14]
+        success_url = reverse_lazy('select', kwargs={'yearmonth': yearmonth})
+
+        return HttpResponseRedirect(success_url)
 
 
 class ItemUpdateView(LoginRequiredMixin, UpdateView):
@@ -131,7 +139,6 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
     ビュー：削除画面
     """
     model = Item
-    success_url = reverse_lazy('index')
 
     def delete(self, request, *args, **kwargs):
         """
@@ -140,7 +147,10 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
         item = self.get_object()
         item.delete()
 
-        return HttpResponseRedirect(self.success_url)
+        yearmonth = self.request.path[11:17]
+        success_url = reverse_lazy('select', kwargs={'yearmonth': yearmonth})
+
+        return HttpResponseRedirect(success_url)
 
 class ItemSelectView(LoginRequiredMixin, FilterView):
     """
@@ -176,11 +186,7 @@ class ItemSelectView(LoginRequiredMixin, FilterView):
                 for key in request.session['query'].keys():
                     request.GET[key] = request.session['query'][key]
 
-        global yearmonth
-        yearmonth = '202006'
-
         return super().get(request, **kwargs)
-        #return render(request, 'app/templates/app/item_filter.html')
 
     def get_queryset(self):
         """
