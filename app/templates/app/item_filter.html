@@ -89,9 +89,9 @@
                                 <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
                                 {% ifequal request.path|slice:"1:7" "select" %}
-                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk request.path|slice:"8:14" %}">削除</a></td>
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' request.path|slice:"8:14" item.pk %}">削除</a></td>
                                 {% else %}
-                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk yearmonth %}">削除</a></td>
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' yearmonth %}">削除</a></td>
                                 {% endifequal %}
                             </tr>
                         </tbody>
@@ -104,9 +104,9 @@
                                 <td><p>{{ item.sample_2|default_if_none:"未入力" }}</p></td>
                                 <td><p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p></td>
                                 {% ifequal request.path|slice:"1:7" "select" %}
-                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk request.path|slice:"8:14" %}">削除</a></td>
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' request.path|slice:"8:14" item.pk %}">削除</a></td>
                                 {% else %}
-                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' item.pk yearmonth %}">削除</a></td>
+                                    <td><a class="btn btn-outline-dark " href="{% url 'delete' yearmonth item.pk %}">削除</a></td>
                                 {% endifequal %}
                             </tr>
                         </tbody>

@@ -147,7 +147,7 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
         item = self.get_object()
         item.delete()
 
-        yearmonth = self.request.path[11:17]
+        yearmonth = self.request.path[8:14]
         success_url = reverse_lazy('select', kwargs={'yearmonth': yearmonth})
 
         return HttpResponseRedirect(success_url)
