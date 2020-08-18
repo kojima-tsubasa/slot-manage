@@ -58,7 +58,7 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         ソート順・デフォルトの絞り込みを指定
         """
         # デフォルトの並び順として、登録時間（降順）をセットする。
-        return Item.objects.all().order_by('-created_at')
+        return Item.objects.all().filter(sample_4=self.request.user).order_by('created_at')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """
@@ -66,7 +66,14 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         """
         # 表示データを追加したい場合は、ここでキーを追加しテンプレート上で表示する
         # 例：kwargs['sample'] = 'sample'
-        return super().get_context_data(object_list=object_list, **kwargs)
+
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context.update({
+            'item_l' : Item.objects.all(),
+            'item_list2' : Item.objects.all().filter(sample_4=self.request.user).values('sample_3').distinct().order_by('sample_3'),
+        })
+
+        return context
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
@@ -95,6 +102,7 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         initial = super().get_initial()
         yearmonth = self.request.path[8:14]
         initial["sample_3"] = yearmonth
+        initial["sample_4"] = self.request.user
         return initial
 
     def form_valid(self, form):
@@ -193,7 +201,7 @@ class ItemSelectView(LoginRequiredMixin, FilterView):
         ソート順・デフォルトの絞り込みを指定
         """
         # デフォルトの並び順として、登録時間（降順）をセットする。
-        return Item.objects.all().order_by('-created_at')
+        return Item.objects.all().filter(sample_4=self.request.user).order_by('created_at')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """
@@ -201,6 +209,13 @@ class ItemSelectView(LoginRequiredMixin, FilterView):
         """
         # 表示データを追加したい場合は、ここでキーを追加しテンプレート上で表示する
         # 例：kwargs['sample'] = 'sample'
-        return super().get_context_data(object_list=object_list, **kwargs)
+
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context.update({
+            'item_l' : Item.objects.all(),
+            'item_list2' : Item.objects.all().filter(sample_4=self.request.user).values('sample_3').distinct().order_by('sample_3'),
+        })
+
+        return context
 
 

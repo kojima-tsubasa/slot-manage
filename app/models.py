@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import HttpResponseRedirect
 
 from users.models import User
 
@@ -33,6 +34,14 @@ class Item(models.Model):
         #default='202008',
         verbose_name='年月',
         max_length=8,
+        blank=True,
+        null=True,
+    )
+
+    # サンプル項目4 整数
+    sample_4 = models.CharField(
+        verbose_name='作成者',
+        max_length=50,
         blank=True,
         null=True,
     )

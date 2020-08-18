@@ -28,10 +28,12 @@ class User(AbstractUser):
 
     # get_full_name()の変更
     def get_full_name(self):
-        if self.full_name:
-            return self.full_name
-        else:
-            return self.username + '（氏名未登録）'
+        #if self.full_name:
+        #    return self.full_name
+        #else:
+        #    return self.username + '（氏名未登録）'
+
+        return self.username
 
     # 選択リストでの表示
     def __str__(self):
