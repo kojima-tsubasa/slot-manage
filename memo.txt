@@ -15,3 +15,7 @@ git commit -m "4 commit"
 git remote remove heroku
 git remote add heroku https://github.com/kojima-tsubasa/slot-manage.git
 git push heroku master
+
+
+
+heroku git:remote -a slot-manage
