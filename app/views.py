@@ -116,8 +116,7 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item.updated_at = timezone.now()
         item.save()
 
-        yearmonth = self.request.path[8:14]
-        success_url = reverse_lazy('select', kwargs={'yearmonth': yearmonth})
+        success_url = reverse_lazy('select', kwargs={'yearmonth': item.sample_3})
 
         return HttpResponseRedirect(success_url)
 

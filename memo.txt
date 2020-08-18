@@ -4,6 +4,7 @@ env\Scripts\activate
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver
 
 
@@ -19,3 +20,5 @@ git push heroku master
 
 
 heroku git:remote -a slot-manage
+heroku run python manage.py migrate
+heroku run python manage.py createsuperuser
