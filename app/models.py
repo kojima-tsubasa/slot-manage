@@ -1,5 +1,6 @@
 from django.db import models
 from django.http import HttpResponseRedirect
+from django.core.validators import RegexValidator
 
 from users.models import User
 
@@ -17,23 +18,30 @@ class Item(models.Model):
     sample_1 = models.CharField(
         verbose_name='機種名',
         max_length=20,
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
     )
 
     # サンプル項目2 メモ
     sample_2 = models.IntegerField(
         verbose_name='収支',
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
+    )
+
+    # サンプル項目3 正規化
+    sample_3_regex = RegexValidator(
+        regex = r'(19\d{2}|20\d{2})(0[1-9]|1[0-2])',
+        message = ("1900～2099年、または01～12月で入力してください。")
     )
 
     # サンプル項目3 整数
     sample_3 = models.CharField(
     #sample_3 = models.IntegerField(
         #default='202008',
+        validators=[sample_3_regex],
         verbose_name='年月',
-        max_length=8,
+        max_length=6,
         blank=True,
         null=True,
     )
