@@ -58,6 +58,7 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         ソート順・デフォルトの絞り込みを指定
         """
         # デフォルトの並び順として、登録時間（降順）をセットする。
+        #order_list = ('created_at','sample_3')
         return Item.objects.all().filter(sample_4=self.request.user).order_by('created_at')
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -175,7 +176,7 @@ class ItemSelectView(LoginRequiredMixin, FilterView):
     strict = False
 
     # 1ページの表示
-    paginate_by = 20
+    paginate_by = 1000000
 
     def get(self, request, **kwargs):
         """
